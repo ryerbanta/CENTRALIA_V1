@@ -73,30 +73,22 @@ template: '<div class="product-logo product-logo-local" layout="row" layout-alig
 
 })();
 
-// Google Analytics with Adjust virtual location (simulation of GET search request) 
-var src = "";
-var qry = "";
-var s = "" + window.location.search;
-var sr0 = s.split("vl(freeText0)=");
-if (sr0.length > 1) qry = qry + ((qry.length == 0)? "&query=" : "+") + sr0[1].split("&")[0];
-var sr1 = s.split("vl(freeText1)=");
-if (sr1.length > 1) qry = qry + ((qry.length == 0)? "&query=" : "+") + sr1[1].split("&")[0];
-var sr2 = s.split("vl(freeText2)=");
-if (sr2.length > 1) qry = qry + ((qry.length == 0)? "&query=" : "+") + sr2[1].split("&")[0];
-if (qry.length > 0) src = window.location.pathname + window.location.search + qry;
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-98618003-1']); 
-if (src == "") _gaq.push(['_trackPageview']);
-else _gaq.push(['_trackPageview',src])        
-_gaq.push(['_setDomainName', 'none']);
-_gaq.push(['_setAllowLinker', true]);
-(function() {
-var ga = document.createElement('script'); ga.type = 'text/javascript';
-ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-var s = document.getElementsByTagName('script')[0];
-s.parentNode.insertBefore(ga, s); 
-})();
+// Google Analytics
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-98618003-1', 'auto');
+  ga('send', 'pageview');
+
+// Google Analytics to account for Primo's single page nature
+app.run(['$rootScope', '$location', '$window', function($rootScope, $location, $window){
+  $rootScope.$on('$locationChangeSuccess', function(event){
+    $window.ga('send', 'pageview', {location: $location.url()});
+  });
+}]);
+
 
 
 
